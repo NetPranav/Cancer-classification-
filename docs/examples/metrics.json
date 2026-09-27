@@ -1,0 +1,66 @@
+{
+  "metrics": {
+    "n": 160,
+    "accuracy_all": 0.9,
+    "coverage_answered": 0.54375,
+    "accuracy_on_answered": 0.9770114942528736,
+    "conformal_coverage": 0.925,
+    "conformal_target": 0.9,
+    "mean_set_size": 1.0375,
+    "auroc_abnormal_vs_normal": 0.9864583333333333,
+    "recall_per_class": {
+      "normal": 0.975,
+      "architectural_disorder": 0.825,
+      "nuclear_atypia": 1.0,
+      "hypercellularity": 0.8
+    },
+    "mean_fraction_of_image_read": 0.125,
+    "accuracy_concept_evidence_alone": 0.8,
+    "accuracy_learned_prototypes_alone": 0.5125,
+    "accuracy_duplex_stream_alone": 0.9,
+    "pixel_auroc": 0.9583465263029982,
+    "pointing_game": 0.85
+  },
+  "calibration": {
+    "weights": {
+      "concept_evidence": 1.0,
+      "learned_prototypes": 0.0,
+      "duplex_stream": 2.0
+    },
+    "temperature": 2.6604772300304615,
+    "channel_temperatures": {
+      "concept_evidence": 2.0910004175201276,
+      "learned_prototypes": 0.3539069545755278,
+      "duplex_stream": 2.0289831537534364
+    },
+    "halting": {
+      "min_steps": 8,
+      "threshold": 0.5,
+      "agreement": 0.99,
+      "mean_fraction_read": 0.125
+    },
+    "tune_nll": 0.26322767012058296,
+    "conformal_qhat": 0.7307502630581086,
+    "selective": {
+      "threshold": 0.9571528961757216,
+      "coverage": 0.56,
+      "errors": 0,
+      "answered": 56,
+      "certified": true
+    },
+    "n_needed_for_certificate": 45,
+    "n_calibration": 100
+  },
+  "ssl_loss_first_last": [
+    1.444911003112793,
+    -0.42576706409454346
+  ],
+  "seconds": 123.53690385818481,
+  "sizes": {
+    "unl": 40,
+    "normals": 80,
+    "support": 12,
+    "cal": 50,
+    "test": 40
+  }
+}

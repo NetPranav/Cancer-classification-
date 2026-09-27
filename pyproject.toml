@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oncopattern"
+version = "0.1.0"
+description = "Pattern-level, explainable, data-efficient cancer image analysis (research software, not a medical device)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "torch>=2.1"]
+
+[project.optional-dependencies]
+io = ["pillow", "pydicom", "nibabel"]
+dev = ["pytest"]
+
+[project.scripts]
+oncopattern = "oncopattern.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["oncopattern*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::UserWarning"]

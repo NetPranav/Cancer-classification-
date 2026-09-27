@@ -1,0 +1,74 @@
+{
+  "times": [
+    0.0,
+    6.0,
+    12.0,
+    18.0,
+    24.0
+  ],
+  "scores": [
+    1.1091547012329102,
+    1.2366108894348145,
+    2.606842279434204,
+    8.255212783813477,
+    17.500778198242188
+  ],
+  "trend_per_unit_time": 1.1516765060535512,
+  "trend_95ci": [
+    1.0912758386102286,
+    1.2120771734968738
+  ],
+  "trend_significant": true,
+  "cusum": [
+    0.0,
+    0.0,
+    11.411349194670336,
+    71.94835163302821,
+    212.89694184504765
+  ],
+  "change_detected_at": 12.0,
+  "doubling_time": 2.6517741949017233,
+  "first_abnormal_prediction_at": 12,
+  "per_timepoint": [
+    {
+      "month": 0,
+      "prediction": "normal",
+      "p": 0.9826886725588508,
+      "answered": true,
+      "true_lesion_radius_px": 0.0,
+      "flagged_area_px": 0.0
+    },
+    {
+      "month": 6,
+      "prediction": "normal",
+      "p": 0.9894430485760972,
+      "answered": true,
+      "true_lesion_radius_px": 0.0,
+      "flagged_area_px": 5.0
+    },
+    {
+      "month": 12,
+      "prediction": "mass_lesion",
+      "p": 0.8175969411802676,
+      "answered": true,
+      "true_lesion_radius_px": 1.2,
+      "flagged_area_px": 94.0
+    },
+    {
+      "month": 18,
+      "prediction": "mass_lesion",
+      "p": 0.9814773920474056,
+      "answered": true,
+      "true_lesion_radius_px": 2.2,
+      "flagged_area_px": 380.0
+    },
+    {
+      "month": 24,
+      "prediction": "mass_lesion",
+      "p": 0.9980762665313074,
+      "answered": true,
+      "true_lesion_radius_px": 3.4,
+      "flagged_area_px": 585.0
+    }
+  ]
+}

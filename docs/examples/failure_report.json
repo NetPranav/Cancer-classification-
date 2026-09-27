@@ -1,0 +1,2230 @@
+{
+  "summary": {
+    "cases": 160,
+    "answered": 87,
+    "abstained": 73,
+    "errors_on_answered": 2,
+    "error_rate_on_answered": 0.022988505747126436,
+    "error_rate_on_answered_95ci": [
+      0.006326952471398799,
+      0.07999473274770788
+    ],
+    "set_coverage": 0.925
+  },
+  "slices": [
+    {
+      "key": "site",
+      "value": "[36.05598831176758, 14.378889083862305]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[44.99285888671875, 31.48234748840332]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.6220817565918, 19.35601234436035]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.0838508605957, 41.51381301879883]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.25944137573242, 17.269575119018555]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[14.668827056884766, 14.550509452819824]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[46.06824493408203, 28.463102340698242]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[38.24929428100586, 36.64125442504883]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[16.36817169189453, 47.66138458251953]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.300811767578125, 20.09015655517578]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[42.27033615112305, 24.269895553588867]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[28.37792205810547, 29.8375244140625]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[16.44589614868164, 27.78795623779297]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[45.484745025634766, 20.927337646484375]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.602142333984375, 40.31757736206055]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[20.906076431274414, 18.5423526763916]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.094486236572266, 27.34381103515625]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.291095733642578, 25.495546340942383]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.038942337036133, 36.5697135925293]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[27.185033798217773, 35.40048599243164]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[22.529504776000977, 49.56708908081055]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.222341537475586, 38.512306213378906]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[41.4588737487793, 46.6785774230957]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.30001449584961, 44.996917724609375]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.93789291381836, 46.61928176879883]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.029674530029297, 29.171274185180664]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[35.00682067871094, 46.977970123291016]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[45.84477233886719, 37.497196197509766]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[39.37947082519531, 28.726308822631836]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.27822494506836, 25.051090240478516]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.98582458496094, 14.83355712890625]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[33.74676513671875, 43.850460052490234]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[26.694536209106445, 41.055503845214844]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[39.75843048095703, 21.676780700683594]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[29.295459747314453, 35.81851577758789]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[24.21951675415039, 39.79056167602539]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[37.11857986450195, 19.505523681640625]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[14.194876670837402, 16.15985870361328]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.48076629638672, 30.180116653442383]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[48.80131149291992, 43.30756378173828]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[38.47740173339844, 46.25873947143555]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[27.068696975708008, 14.146949768066406]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[15.186179161071777, 38.62110137939453]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[43.83738327026367, 20.639482498168945]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.087432861328125, 27.411212921142578]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[17.11804962158203, 40.094688415527344]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.90896224975586, 18.705034255981445]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[17.77864646911621, 22.097471237182617]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[14.15184497833252, 14.728692054748535]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[44.317283630371094, 34.92448806762695]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[30.219877243041992, 33.71342468261719]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[30.073001861572266, 40.179954528808594]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[22.139892578125, 15.862655639648438]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.544992446899414, 22.110963821411133]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[34.165225982666016, 18.51658058166504]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[16.11697769165039, 39.84881591796875]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[15.92856502532959, 31.00696563720703]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[37.80130386352539, 30.853086471557617]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[17.031917572021484, 14.615097999572754]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[16.215051651000977, 23.865787506103516]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[16.858625411987305, 28.60781478881836]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.410375595092773, 19.527925491333008]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[29.899660110473633, 18.19233512878418]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[26.505231857299805, 41.02018356323242]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[30.828645706176758, 15.668277740478516]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[30.10120964050293, 25.127050399780273]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[37.23817443847656, 40.723236083984375]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[18.325143814086914, 17.593639373779297]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[17.73265266418457, 14.949341773986816]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[46.46342086791992, 40.65553665161133]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.810726165771484, 46.43567657470703]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[20.25493621826172, 16.52450942993164]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[18.018939971923828, 40.32078170776367]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.47679901123047, 20.958091735839844]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.680553436279297, 19.648305892944336]",
+      "cases": 1,
+      "failures": 1,
+      "failure_rate": 1.0,
+      "ci95": [
+        0.20654329147389294,
+        1.0
+      ],
+      "flagged": false
+    },
+    {
+      "key": "true_label",
+      "value": "hypercellularity",
+      "cases": 40,
+      "failures": 30,
+      "failure_rate": 0.75,
+      "ci95": [
+        0.598057409330299,
+        0.8581303210445048
+      ],
+      "flagged": true
+    },
+    {
+      "key": "modality",
+      "value": "histology",
+      "cases": 160,
+      "failures": 75,
+      "failure_rate": 0.46875,
+      "ci95": [
+        0.39306676250273337,
+        0.5458986772878935
+      ],
+      "flagged": false
+    },
+    {
+      "key": "organ",
+      "value": "breast",
+      "cases": 160,
+      "failures": 75,
+      "failure_rate": 0.46875,
+      "ci95": [
+        0.39306676250273337,
+        0.5458986772878935
+      ],
+      "flagged": false
+    },
+    {
+      "key": "true_label",
+      "value": "normal",
+      "cases": 40,
+      "failures": 18,
+      "failure_rate": 0.45,
+      "ci95": [
+        0.30705075280944694,
+        0.6017117011155924
+      ],
+      "flagged": false
+    },
+    {
+      "key": "true_label",
+      "value": "architectural_disorder",
+      "cases": 40,
+      "failures": 15,
+      "failure_rate": 0.375,
+      "ci95": [
+        0.2422277353579172,
+        0.529678399454681
+      ],
+      "flagged": false
+    },
+    {
+      "key": "true_label",
+      "value": "nuclear_atypia",
+      "cases": 40,
+      "failures": 12,
+      "failure_rate": 0.3,
+      "ci95": [
+        0.18074670915695296,
+        0.454303106543204
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.549701690673828, 42.15360641479492]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[26.347856521606445, 48.735015869140625]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[20.15839958190918, 48.11277770996094]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[45.05704879760742, 27.72801971435547]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.35332489013672, 35.853248596191406]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[16.01917839050293, 44.869384765625]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.141782760620117, 20.42095184326172]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[49.88457107543945, 43.29147720336914]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[14.8463716506958, 37.29536056518555]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[49.38786697387695, 26.293670654296875]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[39.14080810546875, 31.260713577270508]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[30.570768356323242, 19.514387130737305]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[27.431459426879883, 22.842164993286133]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[26.042970657348633, 47.805259704589844]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[48.780555725097656, 46.910240173339844]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[26.826513290405273, 25.36273193359375]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[22.486949920654297, 42.28982925415039]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[34.49517059326172, 18.77159309387207]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.471553802490234, 27.82918930053711]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.763954162597656, 41.03567886352539]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[24.850452423095703, 28.290735244750977]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.55473327636719, 25.988283157348633]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[28.852394104003906, 43.08675765991211]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.8453426361084, 49.625213623046875]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[28.3773136138916, 46.966609954833984]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[33.874855041503906, 29.331024169921875]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[20.309402465820312, 17.593889236450195]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[15.577485084533691, 23.261703491210938]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[38.17359924316406, 35.81707000732422]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[32.9307746887207, 14.512535095214844]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[36.41459655761719, 31.934236526489258]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[34.17693328857422, 34.71506118774414]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[18.886123657226562, 47.81175231933594]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[38.863677978515625, 42.80264663696289]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[34.39992141723633, 15.49521255493164]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[49.725425720214844, 39.22899627685547]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.882251739501953, 36.035762786865234]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[38.181461334228516, 36.420528411865234]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[43.142250061035156, 31.727981567382812]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.29778289794922, 33.500526428222656]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[41.75556564331055, 26.08841896057129]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[46.17409133911133, 37.27255630493164]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[26.676631927490234, 37.994869232177734]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[24.672046661376953, 32.45398712158203]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[49.38603591918945, 33.466339111328125]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[44.588443756103516, 45.88416290283203]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.455249786376953, 33.42745590209961]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[49.09114074707031, 15.766761779785156]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[42.66558074951172, 29.874820709228516]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[14.768075942993164, 48.23092269897461]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[46.98282241821289, 49.03306198120117]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.07822608947754, 46.819583892822266]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[22.018484115600586, 19.952211380004883]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.926715850830078, 16.5458984375]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[21.097801208496094, 29.478609085083008]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.298566818237305, 33.706451416015625]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[34.94759750366211, 33.69449996948242]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[15.783465385437012, 14.125592231750488]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[16.30600357055664, 19.865955352783203]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[29.480098724365234, 19.854137420654297]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[44.78935623168945, 27.933204650878906]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[24.133136749267578, 30.396484375]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.417892456054688, 30.9711856842041]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[36.563838958740234, 14.126220703125]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[45.679840087890625, 35.19095993041992]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[40.5952033996582, 49.751007080078125]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[39.67612838745117, 40.211177825927734]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.726465225219727, 18.45941162109375]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[45.77799987792969, 45.141475677490234]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[42.637210845947266, 33.286590576171875]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[47.286415100097656, 21.814422607421875]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[38.133689880371094, 21.258323669433594]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[49.74060821533203, 19.469472885131836]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[43.08747863769531, 37.00035095214844]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[25.255189895629883, 23.63052749633789]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[45.92685317993164, 34.98694610595703]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[31.30015754699707, 16.837779998779297]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[21.726842880249023, 35.585205078125]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[39.12387466430664, 14.538334846496582]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[28.776840209960938, 45.753662109375]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[39.965965270996094, 24.076858520507812]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[23.563947677612305, 24.24152946472168]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[36.94525909423828, 27.691802978515625]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[45.02632522583008, 33.40020751953125]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    },
+    {
+      "key": "site",
+      "value": "[41.33555221557617, 15.62657642364502]",
+      "cases": 1,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "ci95": [
+        0.0,
+        0.7934567085261071
+      ],
+      "flagged": false
+    }
+  ],
+  "clusters": [
+    {
+      "cluster": 1,
+      "size": 41,
+      "patterns": {
+        "architectural_disorder -> abstain": 15,
+        "normal -> abstain": 18,
+        "hypercellularity -> normal": 2,
+        "hypercellularity -> abstain": 6
+      },
+      "mean_concepts": {
+        "orientation_misalignment": 1.0534919791105317,
+        "order_loss": 0.9085130880518657,
+        "nuclear_enlargement": 0.9467726349830627,
+        "hyperchromasia": 0.9681831729121324,
+        "crowding": 0.8096377064542073,
+        "focal_hyperintensity": 0.8817999610086766,
+        "asymmetry": 0.8700097828376584,
+        "normality_deviation": 0.6602861786760935
+      },
+      "cases": [
+        "tissue_0000",
+        "tissue_0003",
+        "tissue_0008",
+        "tissue_0010",
+        "tissue_0012",
+        "tissue_0016",
+        "tissue_0021",
+        "tissue_0028",
+        "tissue_0035",
+        "tissue_0041",
+        "tissue_0046",
+        "tissue_0049",
+        "tissue_0059",
+        "tissue_0068",
+        "tissue_0076",
+        "tissue_0082",
+        "tissue_0085",
+        "tissue_0090",
+        "tissue_0091",
+        "tissue_0094",
+        "tissue_0097",
+        "tissue_0098",
+        "tissue_0100",
+        "tissue_0101",
+        "tissue_0104",
+        "tissue_0107",
+        "tissue_0110",
+        "tissue_0112",
+        "tissue_0115",
+        "tissue_0118",
+        "tissue_0121",
+        "tissue_0127",
+        "tissue_0133",
+        "tissue_0140",
+        "tissue_0144",
+        "tissue_0148",
+        "tissue_0151",
+        "tissue_0152",
+        "tissue_0153",
+        "tissue_0155",
+        "tissue_0158"
+      ]
+    },
+    {
+      "cluster": 0,
+      "size": 24,
+      "patterns": {
+        "hypercellularity -> abstain": 21,
+        "nuclear_atypia -> abstain": 3
+      },
+      "mean_concepts": {
+        "orientation_misalignment": 0.937197887028257,
+        "order_loss": 0.883433369298776,
+        "nuclear_enlargement": 1.115934242804845,
+        "hyperchromasia": 0.9977443267901739,
+        "crowding": 1.2970755696296692,
+        "focal_hyperintensity": 1.1641601845622063,
+        "asymmetry": 0.865471842388312,
+        "normality_deviation": 3.4077419117093086
+      },
+      "cases": [
+        "tissue_0002",
+        "tissue_0004",
+        "tissue_0006",
+        "tissue_0029",
+        "tissue_0033",
+        "tissue_0044",
+        "tissue_0051",
+        "tissue_0053",
+        "tissue_0058",
+        "tissue_0063",
+        "tissue_0072",
+        "tissue_0078",
+        "tissue_0079",
+        "tissue_0092",
+        "tissue_0113",
+        "tissue_0117",
+        "tissue_0123",
+        "tissue_0125",
+        "tissue_0129",
+        "tissue_0131",
+        "tissue_0136",
+        "tissue_0137",
+        "tissue_0138",
+        "tissue_0159"
+      ]
+    },
+    {
+      "cluster": 2,
+      "size": 10,
+      "patterns": {
+        "nuclear_atypia -> abstain": 9,
+        "hypercellularity -> abstain": 1
+      },
+      "mean_concepts": {
+        "orientation_misalignment": 0.7644956648349762,
+        "order_loss": 0.882744699716568,
+        "nuclear_enlargement": 1.3759986639022828,
+        "hyperchromasia": 1.0996752858161927,
+        "crowding": 1.5876822113990783,
+        "focal_hyperintensity": 1.1661710739135742,
+        "asymmetry": 1.2303308486938476,
+        "normality_deviation": 5.856090259552002
+      },
+      "cases": [
+        "tissue_0001",
+        "tissue_0014",
+        "tissue_0031",
+        "tissue_0061",
+        "tissue_0069",
+        "tissue_0077",
+        "tissue_0086",
+        "tissue_0119",
+        "tissue_0134",
+        "tissue_0135"
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "slice": "true_label=hypercellularity",
+      "failure_rate": 0.75,
+      "reason": "30/40 failed (95% CI 0.60-0.86)",
+      "acquire": [
+        "CAMELYON16/17",
+        "PanNuke",
+        "BreakHis"
+      ]
+    },
+    {
+      "slice": "organ=breast",
+      "failure_rate": 0.46875,
+      "reason": "75/160 failed (95% CI 0.39-0.55)",
+      "acquire": [
+        "CAMELYON16/17",
+        "PanNuke",
+        "BreakHis"
+      ]
+    },
+    {
+      "slice": "modality=histology",
+      "failure_rate": 0.46875,
+      "reason": "75/160 failed (95% CI 0.39-0.55)",
+      "acquire": [
+        "CAMELYON16/17",
+        "PanNuke",
+        "BreakHis"
+      ]
+    },
+    {
+      "slice": "true_label=normal",
+      "failure_rate": 0.45,
+      "reason": "18/40 failed (95% CI 0.31-0.60)",
+      "acquire": [
+        "CAMELYON16/17",
+        "PanNuke",
+        "BreakHis"
+      ]
+    },
+    {
+      "slice": "true_label=architectural_disorder",
+      "failure_rate": 0.375,
+      "reason": "15/40 failed (95% CI 0.24-0.53)",
+      "acquire": [
+        "CAMELYON16/17",
+        "PanNuke",
+        "BreakHis"
+      ]
+    },
+    {
+      "slice": "true_label=nuclear_atypia",
+      "failure_rate": 0.3,
+      "reason": "12/40 failed (95% CI 0.18-0.45)",
+      "acquire": [
+        "CAMELYON16/17",
+        "PanNuke",
+        "BreakHis"
+      ]
+    }
+  ],
+  "learning_curve": {
+    "n_labelled": [
+      12,
+      24,
+      48,
+      96
+    ],
+    "error": [
+      0.26875000000000004,
+      0.11875000000000002,
+      0.125,
+      0.06874999999999998
+    ],
+    "fit": {
+      "a": 5.421771500320579,
+      "b": 1.3107533737333856,
+      "floor_c": 0.058927714285714264
+    },
+    "n_for_5pct": null,
+    "n_for_1pct": null
+  }
+}
