@@ -136,6 +136,27 @@ After the fixes: 83% held-out on the lesion question after 500 steps
 gradient clipping) were ruled out along the way. With the real training
 recipe the plateau on easy tasks breaks in under 50 steps on every seed.
 
+## First measured results
+
+Tiny preset (2.0M parameters), 3,000 steps x 16 examples on a laptop CPU,
+mixed tissue and MRI phantom tasks with 30% masked-patch examples; 40
+held-out examples per task. "Baseline" is the best constant answer.
+Raw numbers are in `docs/examples/gpm_tiny_cpu_eval.json`.
+
+| Task | First version | After the four fixes | Baseline |
+|---|---|---|---|
+| MRI lesion yes/no | 0.43 | **1.00** | 0.53 |
+| MRI growth between two scans | 0.50 | **0.85** | 0.55 |
+| MRI lesion box (IoU reward) | 0.43 | **0.61** | 0.48 |
+| Tissue pattern (4-way, single-cell) | 0.23 | 0.18 | 0.38 |
+| Tissue normal / locate / describe / count | at baseline | at baseline | |
+| Surprise AUROC (image, tissue, no labels) | 0.86 | 0.85 | 0.50 |
+
+Single-cell tissue patterns are the open problem for GPM. They are also
+the core of the cancer use case, so they are the first thing the Kaggle
+`base` run must answer. A short GRPO phase (40 updates, lr 5e-5) moved
+held-out rewards by less than 0.03, which is too little to claim anything.
+
 ## Sizes and what your compute can train
 
 | preset | params | where |

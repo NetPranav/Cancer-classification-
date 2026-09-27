@@ -31,6 +31,30 @@ acquire next.
   deciban evidence ledgers, counterfactual regions, certified abstention and
   the failure loop. GPM reuses these tools as its verifier and calibration layer.
 
+### Track B: first measured results (tiny 2M model, 3,000 steps on a laptop CPU, synthetic data)
+
+"Baseline" is the best *constant* answer, i.e. what a model that ignores the image would score. Verifier
+reward in [0, 1], 40 held-out examples per task
+([raw results](docs/examples/gpm_tiny_cpu_eval.json)):
+
+| Task (all asked as free-text prompts) | GPM | Constant-answer baseline | Learned? |
+|---|---|---|---|
+| MRI: "Is there a mass lesion?" | **1.00** | 0.53 | yes |
+| MRI: "Has the lesion grown?" (two scans, months apart) | **0.85** | 0.55 | yes |
+| MRI: "Locate the lesion." (box tokens, IoU) | **0.61** | 0.48 | partly |
+| Tissue: "Measure nuclear enlargement / misalignment ..." | 0.65 | 0.57 | slightly |
+| Tissue: "Which pattern is present?" (4 single-cell patterns) | 0.18 | 0.38 | **no** |
+| Tissue: normal? / locate / describe / count | = baseline | | **no** |
+| Label-free surprise map: abnormal vs normal tissue image (AUROC) | 0.85 | 0.50 | yes, with no labels |
+
+What this does and does not show: the architecture learns radiology-scale
+detection, grounding and change-over-time from scratch, and its own
+masked-patch surprise flags abnormal tissue with no labels. It does **not**
+yet learn single-cell patterns at 2M parameters and about 48k examples; the
+Track A pipeline does those at 90-97% on the same phantoms. Whether the
+88M `base` model learns them on Kaggle is the next experiment
+([ROADMAP](ROADMAP.md) G7), not a claim. None of this is evidence on real patients.
+
 ### Track A pipeline
 
 ```mermaid

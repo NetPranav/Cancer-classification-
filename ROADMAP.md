@@ -163,7 +163,8 @@ prompt, no classification head. The Track A tools become its *verifier*.
 | G4 | Verifier-generated tasks (count, measure, locate, compare, describe) for any image | ✅ |
 | G5 | GRPO from verifiable rewards with an abstention reward | ✅ one-step tested |
 | G6 | Kaggle-ready training: resumable, time budget, fp16/bf16, 2-GPU DDP, real-data sources (folders, CSV, masks, colour) | ✅ DDP tested on CPU (gloo) |
-| G7 | First real run: `base` on Kaggle 2x T4 with PCam + LC25000 + Brain MRI + BUSI | ⬜ **your next step** |
+| G6b | CPU smoke run (tiny): MRI lesion 1.00, growth 0.85, box 0.61 vs baselines 0.53/0.55/0.48; single-cell tissue patterns **not learned** at 2M | ✅ measured |
+| G7 | First real run: `base` on Kaggle 2x T4 with PCam + LC25000 + Brain MRI + BUSI; first question: are single-cell patterns learned at 88M? | ⬜ **your next step** |
 | G8 | Ablations H1-H5 (docs/GPM.md) at matched compute, 3 seeds; held-out dataset | ⬜ |
 | G9 | Foveated reading for whole slides: low-resolution pass → surprise → read only surprising tiles at high resolution | ⬜ |
 | G10 | Scale-up (1b / 7b) with FSDP, when hardware allows | ⬜ |

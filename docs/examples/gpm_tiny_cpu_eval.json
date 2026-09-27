@@ -1,0 +1,258 @@
+{
+  "surprise": {
+    "patch_auroc": 0.6967921378356875,
+    "image_auroc": 0.8533333333333334
+  },
+  "rl": {
+    "train_reward_first10": 0.44494563718532276,
+    "train_reward_last10": 0.46320789720374833,
+    "heldout_before": {
+      "locate": 0.2,
+      "measure": 0.6095996441434125,
+      "count": 0.7824596769732847
+    },
+    "heldout_after": {
+      "locate": 0.2,
+      "measure": 0.6095996441434125,
+      "count": 0.8072787200904105
+    },
+    "other_tasks_after": {
+      "tissue_phantom/classify": 0.23333333333333334,
+      "tissue_phantom/normal": 0.8,
+      "tissue_phantom/locate": 0.2,
+      "tissue_phantom/measure": 0.6095996441434125,
+      "tissue_phantom/count": 0.8072787200904105,
+      "tissue_phantom/describe": 0.2
+    }
+  },
+  "sft_with_baselines": {
+    "tissue_phantom/classify": {
+      "mean_reward": 0.175,
+      "accuracy": 0.175,
+      "baseline_reward": 0.375,
+      "samples": [
+        {
+          "question": "Which pattern is present? Options: architectural disorder, nuclear atypia, normal, hypercellularity.",
+          "truth": "hypercellularity",
+          "output": "normal"
+        },
+        {
+          "question": "Which pattern is present? Options: hypercellularity, normal, nuclear atypia, architectural disorder.",
+          "truth": "hypercellularity",
+          "output": "normal"
+        },
+        {
+          "question": "Which pattern is present? Options: normal, nuclear atypia, architectural disorder, hypercellularity.",
+          "truth": "architectural disorder",
+          "output": "normal"
+        }
+      ],
+      "accuracy_by_likelihood": 0.175,
+      "mean_confidence": 0.2777241940382769
+    },
+    "tissue_phantom/normal": {
+      "mean_reward": 0.825,
+      "accuracy": 0.825,
+      "baseline_reward": 0.825,
+      "samples": [
+        {
+          "question": "Is this tissue normal? Answer yes or no.",
+          "truth": "no",
+          "output": "no"
+        },
+        {
+          "question": "Is this tissue normal? Answer yes or no.",
+          "truth": "yes",
+          "output": "no"
+        },
+        {
+          "question": "Is this tissue normal? Answer yes or no.",
+          "truth": "no",
+          "output": "no"
+        }
+      ],
+      "accuracy_by_likelihood": 0.825,
+      "mean_confidence": 0.7968478681158956
+    },
+    "tissue_phantom/locate": {
+      "mean_reward": 0.175,
+      "accuracy": 0.175,
+      "baseline_reward": 0.175,
+      "samples": [
+        {
+          "question": "Locate the most abnormal cells.",
+          "truth": "<c18><c30><c35><c39>",
+          "output": "none"
+        },
+        {
+          "question": "Locate the most abnormal cells.",
+          "truth": "none",
+          "output": "none"
+        },
+        {
+          "question": "Locate the most abnormal cells.",
+          "truth": "<c14><c38><c25><c49>",
+          "output": "none"
+        }
+      ]
+    },
+    "tissue_phantom/measure": {
+      "mean_reward": 0.6539148329693549,
+      "accuracy": 0.75,
+      "baseline_reward": 0.571560046157962,
+      "samples": [
+        {
+          "question": "Measure nuclear orientation misalignment relative to normal.",
+          "truth": "1.1",
+          "output": "0.8"
+        },
+        {
+          "question": "Measure nuclear enlargement relative to normal.",
+          "truth": "1.0",
+          "output": "1.0"
+        },
+        {
+          "question": "Measure cellularity relative to normal.",
+          "truth": "0.8",
+          "output": "0.8"
+        }
+      ]
+    },
+    "tissue_phantom/count": {
+      "mean_reward": 0.7694029525074064,
+      "accuracy": 1.0,
+      "baseline_reward": 0.7562342522175703,
+      "samples": [
+        {
+          "question": "Count the nuclei.",
+          "truth": "74",
+          "output": "78"
+        },
+        {
+          "question": "Count the nuclei.",
+          "truth": "79",
+          "output": "78"
+        },
+        {
+          "question": "Count the nuclei.",
+          "truth": "75",
+          "output": "77"
+        }
+      ]
+    },
+    "tissue_phantom/describe": {
+      "mean_reward": 0.175,
+      "accuracy": 0.175,
+      "baseline_reward": 0.175,
+      "samples": [
+        {
+          "question": "Describe the findings.",
+          "truth": "hypercellularity; abnormal cells at <c18><c30><c35><c39>.",
+          "output": "normal tissue; no abnormal cells."
+        },
+        {
+          "question": "Describe the findings.",
+          "truth": "normal tissue; no abnormal cells.",
+          "output": "normal tissue; no abnormal cells."
+        },
+        {
+          "question": "Describe the findings.",
+          "truth": "architectural disorder; abnormal cells at <c14><c38><c25><c49>.",
+          "output": "normal tissue; no abnormal cells."
+        }
+      ]
+    },
+    "mri_phantom/lesion": {
+      "mean_reward": 1.0,
+      "accuracy": 1.0,
+      "baseline_reward": 0.525,
+      "samples": [
+        {
+          "question": "Is there a mass lesion? Answer yes or no.",
+          "truth": "no",
+          "output": "no"
+        },
+        {
+          "question": "Is there a mass lesion? Answer yes or no.",
+          "truth": "no",
+          "output": "no"
+        },
+        {
+          "question": "Is there a mass lesion? Answer yes or no.",
+          "truth": "yes",
+          "output": "yes"
+        }
+      ],
+      "accuracy_by_likelihood": 1.0,
+      "mean_confidence": 0.9980750474577145
+    },
+    "mri_phantom/locate": {
+      "mean_reward": 0.6065655119229527,
+      "accuracy": 0.675,
+      "baseline_reward": 0.475,
+      "samples": [
+        {
+          "question": "Locate the lesion.",
+          "truth": "none",
+          "output": "none"
+        },
+        {
+          "question": "Locate the lesion.",
+          "truth": "none",
+          "output": "none"
+        },
+        {
+          "question": "Locate the lesion.",
+          "truth": "<c21><c37><c34><c48>",
+          "output": "<c19><c34><c45><c45>"
+        }
+      ]
+    },
+    "mri_phantom/compare": {
+      "mean_reward": 0.85,
+      "accuracy": 0.85,
+      "baseline_reward": 0.55,
+      "samples": [
+        {
+          "question": "Has the lesion grown? Answer yes or no.",
+          "truth": "no",
+          "output": "no"
+        },
+        {
+          "question": "Has the lesion grown? Answer yes or no.",
+          "truth": "yes",
+          "output": "no"
+        },
+        {
+          "question": "Has the lesion grown? Answer yes or no.",
+          "truth": "no",
+          "output": "no"
+        }
+      ],
+      "accuracy_by_likelihood": 0.85,
+      "mean_confidence": 0.9446713513261784
+    },
+    "mri_phantom/measure": {
+      "mean_reward": 0.3891432175575836,
+      "accuracy": 0.4,
+      "baseline_reward": 0.4250467110265047,
+      "samples": [
+        {
+          "question": "Measure left-right asymmetry relative to normal.",
+          "truth": "0.6",
+          "output": "0.5"
+        },
+        {
+          "question": "Measure left-right asymmetry relative to normal.",
+          "truth": "0.5",
+          "output": "0.5"
+        },
+        {
+          "question": "Measure left-right asymmetry relative to normal.",
+          "truth": "1.1",
+          "output": "0.5"
+        }
+      ]
+    }
+  }
+}

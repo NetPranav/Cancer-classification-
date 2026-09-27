@@ -24,15 +24,18 @@ def option_probs(model: GeneralPatternModel, ex: Example, tok: ByteTokenizer, de
 
 @torch.no_grad()
 def evaluate_tasks(model: GeneralPatternModel, tok: ByteTokenizer, sources: list[Source], n_per_task: int = 20,
-                   seed: int = 1234, device=None, max_new: int = 24) -> dict:
+                   seed: int = 1234, device=None, max_new: int = 64) -> dict:
+    """Grade each task with the verifier. ``baseline_reward`` is the best *constant* answer (the most
+    common true answer, or the median true value): a model that ignores the image scores that much."""
     model.eval()
     out = {}
     for src in sources:
         for task in src.task_weights:
             rng = np.random.default_rng(seed)
-            rewards, correct, probs, ys, samples = [], [], [], [], []
+            rewards, correct, probs, ys, samples, metas = [], [], [], [], [], []
             for i in range(n_per_task):
                 ex = src.sample(rng, task)
+                metas.append(ex.meta)
                 text = tok.decode(model.generate(prompt_batch(ex, tok, model.cfg.patch_size, device), max_new,
                                                  eos_id=tok.eos_id))
                 v = verify(ex.meta, text, tok)
@@ -44,13 +47,24 @@ def evaluate_tasks(model: GeneralPatternModel, tok: ByteTokenizer, sources: list
                     p = option_probs(model, ex, tok, device)
                     probs.append(p)
                     ys.append(ex.meta["options"].index(ex.answer))
-            res = {"mean_reward": float(np.mean(rewards)), "accuracy": float(np.mean(correct)), "samples": samples}
+            res = {"mean_reward": float(np.mean(rewards)), "accuracy": float(np.mean(correct)),
+                   "baseline_reward": _constant_baseline(metas, tok), "samples": samples}
             if probs:
                 P, y = np.stack(probs), np.array(ys)
                 res["accuracy_by_likelihood"] = float((P.argmax(1) == y).mean())
                 res["mean_confidence"] = float(P.max(1).mean())
             out[f"{src.name}/{task}"] = res
     return out
+
+
+def _constant_baseline(metas: list[dict], tok: ByteTokenizer) -> float:
+    """Best mean reward achievable by answering every example with the same text."""
+    from collections import Counter
+    if "value" in metas[0]:
+        cands = [f"{np.median([m['value'] for m in metas]):.1f}"]
+    else:
+        cands = [a for a, _ in Counter(m["answer"] for m in metas).most_common(3)]
+    return float(max(np.mean([verify(m, c, tok)["reward"] for m in metas]) for c in cands))
 
 
 @torch.no_grad()
