@@ -203,6 +203,16 @@ def _load(path: Path, size: int, rgb: bool = False) -> np.ndarray:
     return prepare(load(path), size)
 
 
+def in_split(path, split: str | None, test_fraction: float = 0.1) -> bool:
+    """Deterministic, name-based split: the same file is always train or always test, on every machine
+    and every session, so held-out evaluation never sees training images."""
+    if split in (None, "all"):
+        return True
+    import zlib
+    h = zlib.crc32(str(Path(path).name).encode()) / 2 ** 32
+    return (h < test_fraction) == (split == "test")
+
+
 def _grey(img: np.ndarray) -> np.ndarray:
     return img.mean(0) if img.ndim == 3 else img
 
@@ -214,14 +224,15 @@ class ImageFolderSource(Source):
 
     def __init__(self, root: str, tok: ByteTokenizer, modality: str, spacing_mm: float, size: int = 64,
                  description: str = "", normal_classes=("normal", "benign", "negative", "notumor", "no_tumor", "0"),
-                 max_per_class=None, rgb: bool = False):
+                 max_per_class=None, rgb: bool = False, split: str | None = None):
         self.root, self.tok, self.modality, self.spacing, self.size = Path(root), tok, modality, spacing_mm, size
         self.rgb = rgb
         self.name = f"folder:{self.root.name}"
         self.description = description or f"{modality} image, {spacing_mm * 1000:g} um/px."
         exts = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".npy"}
         self.classes = sorted(d.name for d in self.root.iterdir() if d.is_dir())
-        self.files = {c: sorted(f for f in (self.root / c).rglob("*") if f.suffix.lower() in exts)[:max_per_class]
+        self.files = {c: sorted(f for f in (self.root / c).rglob("*")
+                                if f.suffix.lower() in exts and in_split(f, split))[:max_per_class]
                       for c in self.classes}
         self.classes = [c for c in self.classes if self.files[c]]
         self.normal = [c for c in self.classes if c.lower() in normal_classes]
@@ -274,11 +285,11 @@ class MaskFolderSource(Source):
 
     def __init__(self, images: str, masks: str | None, tok: ByteTokenizer, modality: str, spacing_mm: float,
                  finding: str = "lesion", size: int = 64, description: str = "", mask_suffix: str = "",
-                 rgb: bool = False):
+                 rgb: bool = False, split: str | None = None):
         self.tok, self.modality, self.spacing, self.size, self.finding = tok, modality, spacing_mm, size, finding
         self.rgb, self.suffix = rgb, mask_suffix
         root = Path(images)
-        files = sorted(f for f in root.rglob("*") if f.suffix.lower() in self.EXTS)
+        files = sorted(f for f in root.rglob("*") if f.suffix.lower() in self.EXTS and in_split(f, split))
         if mask_suffix:
             self.pairs = [(f, f.with_name(f.stem + mask_suffix + f.suffix)) for f in files
                           if mask_suffix not in f.stem and f.with_name(f.stem + mask_suffix + f.suffix).exists()]
@@ -323,7 +334,7 @@ class CSVSource(ImageFolderSource):
     def __init__(self, csv_path: str, images: str, tok: ByteTokenizer, modality: str, spacing_mm: float,
                  id_col: str = "id", label_col: str = "label", ext: str = "", names: dict | None = None,
                  size: int = 64, rgb: bool = False, description: str = "", max_rows: int | None = None,
-                 normal_classes=("normal", "benign", "negative", "0")):
+                 normal_classes=("normal", "benign", "negative", "0"), split: str | None = None):
         import csv
         self.tok, self.modality, self.spacing, self.size, self.rgb = tok, modality, spacing_mm, size, rgb
         self.root = Path(images)
@@ -335,8 +346,9 @@ class CSVSource(ImageFolderSource):
             for i, row in enumerate(csv.DictReader(fh)):
                 if max_rows and i >= max_rows:
                     break
-                c = names.get(row[label_col], row[label_col])
-                self.files.setdefault(c, []).append(self.root / f"{row[id_col]}{ext}")
+                f = self.root / f"{row[id_col]}{ext}"
+                if in_split(f, split):
+                    self.files.setdefault(names.get(row[label_col], row[label_col]), []).append(f)
         self.classes = sorted(self.files)
         self.normal = [c for c in self.classes if c.lower() in normal_classes]
         self.tools = None

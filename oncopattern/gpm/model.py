@@ -401,7 +401,8 @@ class GeneralPatternModel(nn.Module):
         for _ in range(max_new):
             logits = self.lm_head(last).float()
             if temperature > 0:
-                nxt = torch.multinomial(F.softmax(logits / temperature, -1), 1, generator=generator)[0, 0]
+                probs = F.softmax(logits / temperature, -1).cpu()  # CPU generator works for any device
+                nxt = torch.multinomial(probs, 1, generator=generator)[0, 0].to(logits.device)
             else:
                 nxt = logits.argmax(-1)[0]
             out.append(int(nxt))

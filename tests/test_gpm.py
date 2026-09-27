@@ -208,7 +208,7 @@ def test_real_data_layouts_csv_suffix_masks_and_colour(tmp_path):
              f"masks:{tmp_path / 'busi'},suffix=_mask,modality=ultrasound,mm=0.1,finding=tumour",
              "phantom_tissue"]
     assert parse_spec(specs[1])[2]["suffix"] == "_mask"
-    mix = build_sources(specs, TOK, 64)
+    mix = build_sources(specs, TOK, 64, split="all")
     csv_src, mask_src, _ = mix.sources
     assert csv_src.classes == ["metastasis", "normal"] and csv_src.tools is not None
     assert len(mask_src.pairs) == 3 and all("_mask" not in str(a) for a, _ in mask_src.pairs)
@@ -240,3 +240,30 @@ def test_conv_stem_is_orientation_equivariant_and_sees_contrast():
     base = stem(x, grp)
     shifted = stem(x + 0.3, grp)
     assert base.shape == (5, 32) and not torch.allclose(base, shifted)  # raw stats still see the offset
+
+
+def test_train_test_split_is_deterministic_and_disjoint(tmp_path):
+    from oncopattern.gpm.sources import in_split
+    names = [tmp_path / f"img_{i}.png" for i in range(2000)]
+    train = {n.name for n in names if in_split(n, "train")}
+    test = {n.name for n in names if in_split(n, "test")}
+    assert not train & test and len(train) + len(test) == 2000
+    assert 0.07 < len(test) / 2000 < 0.13
+    assert test == {n.name for n in names if in_split(tmp_path / "elsewhere" / n.name, "test")}  # name-based
+
+
+def test_kaggle_launcher_builds_a_valid_kernel(tmp_path, monkeypatch):
+    import importlib.util
+    import json
+    spec = importlib.util.spec_from_file_location("launch", "kaggle/launch.py")
+    launch = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(launch)
+    monkeypatch.setattr(launch, "BUILD", tmp_path)
+    d = launch.build_kernel("full", {"steps": 1234, "preset": None}, pcam=True, resume=True, username="someone")
+    meta = json.loads((d / "kernel-metadata.json").read_text())
+    assert meta["machine_shape"] == "NvidiaTeslaT4" and meta["enable_gpu"] and meta["is_private"]
+    assert meta["kernel_sources"] == ["someone/oncopattern-gpm"] and "someone/oncopattern-code" in meta["dataset_sources"]
+    first = (d / "kernel_run.py").read_text().split("\n", 1)[0]
+    cfg = json.loads(first[len("CONFIG = "):])
+    assert cfg["steps"] == 1234 and cfg["preset"] == "base"
+    compile((d / "kernel_run.py").read_text(), "kernel_run.py", "exec")

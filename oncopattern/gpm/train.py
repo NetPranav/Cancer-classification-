@@ -45,19 +45,24 @@ def parse_spec(spec: str) -> tuple[str, str, dict]:
     return m.group(1), m.group(2) or "", opts
 
 
-def build_sources(specs, tok: ByteTokenizer, image_size: int = 64, seed: int = 0, mim_fraction: float = 0.3) -> Mixture:
+def build_sources(specs, tok: ByteTokenizer, image_size: int = 64, seed: int = 0, mim_fraction: float = 0.3,
+                  split: str | None = "train") -> Mixture:
     """Source specs (options after commas; ``weight`` sets the sampling weight):
 
     * ``phantom_tissue`` / ``phantom_mri``
     * ``folder:<root>,modality=histology,mm=0.0005,rgb=1[,normal=lung_n|colon_n]``: class sub-folders
     * ``csv:<labels.csv>,images=<dir>,ext=.tif,id=id,label=label,names=0=normal|1=metastasis,modality=...,mm=...``
     * ``masks:<images>,masks=<dir>`` or ``masks:<images>,suffix=_mask``, plus ``modality=,mm=,finding=``
+
+    Real-data sources use a deterministic name-hash split (``split``: train 90% / test 10%);
+    training always uses ``train``, evaluation ``test``.
     """
     srcs, weights = [], []
     for spec in specs:
         kind, path, o = parse_spec(spec)
         w = float(o.pop("weight", 1.0))
         common = dict(size=image_size)
+        real = dict(split=o.get("split", split))
         if kind == "phantom_tissue":
             src = TissuePhantomSource(tok, seed=seed, **common)
         elif kind == "phantom_mri":
@@ -65,17 +70,17 @@ def build_sources(specs, tok: ByteTokenizer, image_size: int = 64, seed: int = 0
         elif kind == "folder":
             extra = {"normal_classes": tuple(o["normal"].split("|"))} if "normal" in o else {}
             src = ImageFolderSource(path, tok, o.get("modality", "other"), float(o.get("mm", 1.0)),
-                                    rgb=o.get("rgb", "0") == "1", description=o.get("text", ""), **common, **extra)
+                                    rgb=o.get("rgb", "0") == "1", description=o.get("text", ""), **common, **extra, **real)
         elif kind == "csv":
             names = dict(kv.split("=", 1) for kv in o["names"].split("|")) if "names" in o else None
             src = CSVSource(path, o["images"], tok, o.get("modality", "other"), float(o.get("mm", 1.0)),
                             id_col=o.get("id", "id"), label_col=o.get("label", "label"), ext=o.get("ext", ""),
                             names=names, rgb=o.get("rgb", "0") == "1", description=o.get("text", ""),
-                            max_rows=int(o["max_rows"]) if "max_rows" in o else None, **common)
+                            max_rows=int(o["max_rows"]) if "max_rows" in o else None, **common, **real)
         elif kind == "masks":
             src = MaskFolderSource(path, o.get("masks"), tok, o.get("modality", "other"), float(o.get("mm", 1.0)),
                                    o.get("finding", "lesion"), mask_suffix=o.get("suffix", ""),
-                                   rgb=o.get("rgb", "0") == "1", description=o.get("text", ""), **common)
+                                   rgb=o.get("rgb", "0") == "1", description=o.get("text", ""), **common, **real)
         else:
             raise ValueError(f"unknown source kind {kind!r} in {spec!r}")
         srcs.append(src)

@@ -1,5 +1,41 @@
 # Training the General Pattern Model on Kaggle
 
+## Route A: fully automated from the command line (`kaggle/launch.py`)
+
+No notebook clicking. The code goes up as a **private** Kaggle dataset, the
+run is a private GPU kernel (2x T4), the datasets are discovered by folder
+layout, and the checkpoint carries over between sessions.
+
+**One-time setup (by the account owner):**
+1. Kaggle account **phone-verified** (required for GPU kernels).
+2. For PCam: open the *Histopathologic Cancer Detection* competition and
+   accept its rules (otherwise run without `--pcam`).
+3. Credentials as environment variables: `KAGGLE_USERNAME` and
+   `KAGGLE_API_TOKEN` (from kaggle.com/settings → API → Generate New Token), or
+   the legacy `KAGGLE_KEY`. A git-ignored `.env` at the repo root also works.
+   The token gives full access to the account, so revoke or regenerate it
+   when the project is done.
+4. The machine running the launcher needs network access to
+   `www.kaggle.com` and `storage.googleapis.com` (uploads and downloads go
+   through Google Cloud Storage).
+
+**Each week:**
+```
+python kaggle/launch.py check                 # auth OK? GPU hours left? datasets reachable?
+python kaggle/launch.py upload-code           # commits at HEAD -> <user>/oncopattern-code (private)
+python kaggle/launch.py push --mode smoke     # ~25 min: memory and seconds/step on the real GPUs
+python kaggle/launch.py fetch                 # prints suggested_full_steps_for_26h and a first eval
+python kaggle/launch.py push --mode full --steps N [--pcam]           # session 1 (about 11 h)
+python kaggle/launch.py push --mode full --steps N --resume [--pcam]  # sessions 2, 3: continue
+python kaggle/launch.py fetch                 # model.pt, train_log.jsonl, eval.json (held-out splits)
+```
+The learning-rate schedule spans all N steps; each session stops at its time
+budget with a checkpoint, and `--resume` attaches the previous output. Real
+datasets are split by a hash of the file name (90% train / 10% test), so
+evaluation never sees training images, on any machine and in any session.
+
+## Route B: in the Kaggle notebook UI
+
 Kaggle gives about 30 GPU-hours per week, with each session capped (check the
 limit your account shows). Training therefore runs over several sessions, and
 each session resumes from the last checkpoint.

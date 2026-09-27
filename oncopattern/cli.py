@@ -61,6 +61,8 @@ def main(argv=None):
     e.add_argument("--n", type=int, default=20, help="examples per task")
     e.add_argument("--out", default=None, help="write results JSON here")
     e.add_argument("--image-size", type=int, default=64)
+    e.add_argument("--sources", nargs="+", default=["phantom_tissue", "phantom_mri"],
+                   help="same specs as gpm-train; real-data sources are evaluated on their held-out split")
 
     q = sub.add_parser("gpm-ask", help="ask the General Pattern Model anything about an image")
     q.add_argument("image")
@@ -109,14 +111,15 @@ def main(argv=None):
         print(json.dumps({k: v for k, v in res.items() if k != "history"}, indent=2))
     elif args.cmd == "gpm-eval":
         from oncopattern.gpm.evaluate import evaluate_tasks, surprise_auroc
-        from oncopattern.gpm.sources import MRIPhantomSource, TissuePhantomSource
         from oncopattern.gpm.tokenizer import ByteTokenizer
-        from oncopattern.gpm.train import load_model
+        from oncopattern.gpm.train import build_sources, load_model
+        import torch
         tok = ByteTokenizer()
-        model = load_model(args.model)
-        srcs = [TissuePhantomSource(tok, size=args.image_size), MRIPhantomSource(tok, size=args.image_size)]
-        res = {"tasks": evaluate_tasks(model, tok, srcs, args.n),
-               "surprise": surprise_auroc(model, tok, size=args.image_size)}
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model = load_model(args.model, device)
+        srcs = build_sources(args.sources, tok, args.image_size, seed=0, split="test").sources
+        res = {"tasks": evaluate_tasks(model, tok, srcs, args.n, device=device),
+               "surprise": surprise_auroc(model, tok, size=args.image_size, device=device)}
         text = json.dumps(res, indent=2, default=float)
         if args.out:
             Path(args.out).write_text(text)

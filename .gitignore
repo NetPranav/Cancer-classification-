@@ -4,3 +4,10 @@ __pycache__/
 .pytest_cache/
 outputs/
 *.pt
+
+# secrets: never commit
+.env
+.env.*
+kaggle.json
+# local Kaggle launcher working files
+kaggle/_build/
