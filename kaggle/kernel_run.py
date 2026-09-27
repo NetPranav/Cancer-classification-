@@ -110,6 +110,19 @@ if os.path.exists(f"{OUT}/model.pt"):
                          "--out", f"{OUT}/eval.json", "--sources", *specs], env=ENV, cwd=WORK)
     log(f"evaluation exit code {ev.returncode}")
 
+# ---- 5. normative atlas per source + explained examples -------------------------------------------------
+if os.path.exists(f"{OUT}/model.pt"):
+    os.makedirs(f"{OUT}/atlas", exist_ok=True)
+    for i, spec in enumerate(specs):
+        res = subprocess.run([sys.executable, "-m", "oncopattern", "gpm-atlas", "--model", f"{OUT}/model.pt",
+                              "--source", spec.split(",weight=")[0], "--n", "200",
+                              "--image-size", str(CONFIG["image_size"]), "--out", f"{OUT}/atlas/atlas_{i}.pt"],
+                             env=ENV, cwd=WORK, capture_output=True, text=True)
+        with open(f"{OUT}/atlas/atlas_{i}.json", "w") as fh:
+            fh.write(json.dumps({"source": spec, "exit_code": res.returncode,
+                                 "stdout": res.stdout[-4000:], "stderr": res.stderr[-2000:]}, indent=2))
+        log(f"atlas {i} ({spec.split(':')[0]}): exit {res.returncode}")
+
 with open(f"{OUT}/run_info.json", "w") as fh:
     json.dump({"config": CONFIG, "sources": specs, "gpus": gpus, "train_exit_code": rc,
                "wall_seconds": time.time() - t0}, fh, indent=2)

@@ -55,6 +55,8 @@ def main(argv=None):
     t.add_argument("--no-surprise", action="store_true", help="disable surprise conditioning (ablation; ~1.7x cheaper)")
     t.add_argument("--stem", default=None, choices=["d4conv", "d4", "linear"], help="patch stem (ablation)")
     t.add_argument("--seed", type=int, default=0)
+    t.add_argument("--mixed-mim", action="store_true",
+                   help="ablation: learn 'what fits' from all images instead of healthy ones only")
 
     e = sub.add_parser("gpm-eval", help="grade every task with the verifier; surprise-map AUROC")
     e.add_argument("--model", required=True)
@@ -72,6 +74,27 @@ def main(argv=None):
     q.add_argument("--mm-per-px", type=float, default=1.0)
     q.add_argument("--context", default="", help="text before the image, e.g. 'H&E tissue, 0.5 um/px.'")
     q.add_argument("--image-size", type=int, default=64)
+
+    na = sub.add_parser("gpm-atlas", help="build a normative atlas of healthy anatomy for one source")
+    na.add_argument("--model", required=True)
+    na.add_argument("--source", required=True, help="one source spec (same syntax as gpm-train)")
+    na.add_argument("--n", type=int, default=200, help="healthy calibration images")
+    na.add_argument("--image-size", type=int, default=64)
+    na.add_argument("--out", required=True)
+    na.add_argument("--eval-n", type=int, default=40, help="labelled held-out images for detection AUROC")
+
+    nx = sub.add_parser("gpm-explain", help="explain an image as its deviation from healthy anatomy")
+    nx.add_argument("image")
+    nx.add_argument("--model", required=True)
+    nx.add_argument("--atlas", required=True)
+    nx.add_argument("--question", default="Is this image normal? Answer yes or no.")
+    nx.add_argument("--options", default="yes|no", help="answer options separated by |")
+    nx.add_argument("--modality", default="other")
+    nx.add_argument("--mm-per-px", type=float, default=1.0)
+    nx.add_argument("--context", default="")
+    nx.add_argument("--image-size", type=int, default=64)
+    nx.add_argument("--rgb", action="store_true")
+    nx.add_argument("--out", default="explanation.html")
 
     args = ap.parse_args(argv)
     if args.cmd == "demo":
@@ -104,7 +127,7 @@ def main(argv=None):
         from oncopattern.gpm.train import train
         res = train(args.preset, args.steps, args.batch_size, args.lr, args.warmup, args.out, args.sources,
                     args.time_budget_h, args.ckpt_minutes, seed=args.seed, grad_accum=args.grad_accum,
-                    image_size=args.image_size, num_workers=args.num_workers,
+                    image_size=args.image_size, num_workers=args.num_workers, normative=not args.mixed_mim,
                     overrides={"grad_checkpoint": args.grad_checkpoint, "in_channels": args.in_channels,
                                "surprise_conditioning": not args.no_surprise,
                                **({"stem": args.stem} if args.stem else {})})
@@ -134,6 +157,40 @@ def main(argv=None):
         img = prepare(load(args.image), args.image_size)
         ex = Example([ImageItem(img, args.mm_per_px, args.modality)], args.context, " " + args.question)
         print(tok.decode(model.generate(prompt_batch(ex, tok, model.cfg.patch_size), 32, eos_id=tok.eos_id)))
+    elif args.cmd == "gpm-atlas":
+        import numpy as np
+        import torch
+        from oncopattern.gpm.normative import NormativeAtlas, evaluate_atlas, healthy_items
+        from oncopattern.gpm.tokenizer import ByteTokenizer
+        from oncopattern.gpm.train import build_sources, load_model
+        tok = ByteTokenizer()
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model = load_model(args.model, device)
+        calib = build_sources([args.source], tok, args.image_size, split="calib").sources[0]
+        healthy = healthy_items(calib, np.random.default_rng(0), args.n)
+        if len(healthy) < 10:
+            sys.exit(f"only {len(healthy)} healthy calibration images found; the source needs a normal class")
+        atlas = NormativeAtlas.fit(model, tok, healthy, device=device, source=args.source)
+        atlas.save(args.out)
+        test = build_sources([args.source], tok, args.image_size, split="test").sources[0]
+        res = {"healthy_references": len(healthy), "z_threshold": atlas.z_threshold, **atlas.meta,
+               "held_out_detection": evaluate_atlas(model, tok, test, atlas, args.eval_n, device=device)}
+        print(json.dumps(res, indent=2, default=float))
+    elif args.cmd == "gpm-explain":
+        from oncopattern.data.io import load, load_rgb, prepare, prepare_rgb
+        from oncopattern.gpm.data import Example, ImageItem
+        from oncopattern.gpm.normative import NormativeAtlas, explanation_html
+        from oncopattern.gpm.tokenizer import ByteTokenizer
+        from oncopattern.gpm.train import load_model
+        tok = ByteTokenizer()
+        model = load_model(args.model)
+        atlas = NormativeAtlas.load(args.atlas)
+        img = prepare_rgb(load_rgb(args.image), args.image_size) if args.rgb else prepare(load(args.image), args.image_size)
+        ex = Example([ImageItem(img, args.mm_per_px, args.modality)], args.context, " " + args.question)
+        expl = atlas.explain(model, tok, ex, args.options.split("|"))
+        Path(args.out).write_text(explanation_html(expl, img, Path(args.image).name))
+        print(expl["narrative"])
+        print(f"\nreport: {args.out}")
     elif args.cmd == "catalogue":
         from oncopattern.data.catalogue import search
         for e in search(organ=args.organ, modality=args.modality, longitudinal=True if args.longitudinal else None):

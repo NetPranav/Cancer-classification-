@@ -29,6 +29,10 @@ python kaggle/launch.py push --mode full --steps N [--pcam]           # session 
 python kaggle/launch.py push --mode full --steps N --resume [--pcam]  # sessions 2, 3: continue
 python kaggle/launch.py fetch                 # model.pt, train_log.jsonl, eval.json (held-out splits)
 ```
+Each run also builds a **normative atlas** per dataset with a healthy class
+(`gpm/atlas/`), and reports how well "deviation from healthy" alone detects
+abnormal held-out images (and, for BUSI, how well it points at the masks).
+
 The learning-rate schedule spans all N steps; each session stops at its time
 budget with a checkpoint, and `--resume` attaches the previous output. Real
 datasets are split by a hash of the file name (90% train / 10% test), so
@@ -86,6 +90,7 @@ ablation; `--stem linear` is the plain-ViT ablation.
 | `folder:<root>,modality=histology,mm=0.0005,rgb=1,normal=lung_n` | `root/<class>/*.png` (searched recursively) |
 | `csv:<labels.csv>,images=<dir>,ext=.tif,id=id,label=label,names=0=normal\|1=metastasis` | CSV of ids and labels |
 | `masks:<dir>,suffix=_mask,finding=tumour` or `masks:<images>,masks=<masks_dir>` | image and mask pairs |
+| `healthy:<dir>,modality=mri,mm=1.0` | healthy people only (e.g. IXI slices): teaches what normal looks like |
 
 Add `,weight=N` to any spec to sample it N times more often. `mm` is the
 physical size of a pixel. Approximate values are fine; be consistent.

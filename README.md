@@ -24,7 +24,11 @@ acquire next.
   prompt with a text answer. It learns tissue "grammar" by predicting hidden
   patches, so its surprise at a patch is a label-free anomaly map (like a code
   model flagging an unlikely token). Its answers are graded by deterministic
-  verifiers (like unit tests for code). Sizes run from 2.0M to 7.15B
+  verifiers (like unit tests for code). It learns **what healthy anatomy looks
+  like from healthy scans only**, builds a normative atlas, and explains a
+  scan by redrawing the abnormal region as healthy and showing how the
+  answer changes ([docs/GPM.md](docs/GPM.md#knowing-what-healthy-looks-like-the-normative-atlas-gpmnormativepy)).
+  Sizes run from 2.0M to 7.15B
   parameters; about 88M is the right size for Kaggle's 2x T4. See
   [docs/GPM.md](docs/GPM.md) and [kaggle/README.md](kaggle/README.md).
 * **Track A, the explainable pipeline** (the rest of `oncopattern/`):
@@ -91,6 +95,8 @@ python -m oncopattern gpm-plan --gpu t4 --n-gpus 2 --hours 30        # what size
 python -m oncopattern gpm-train --preset tiny --steps 3000           # train GPM from scratch (CPU ok for tiny)
 python -m oncopattern gpm-eval --model outputs/gpm/model.pt          # grade every task with the verifier
 python -m oncopattern gpm-ask img.png "Locate the most abnormal cells." --model outputs/gpm/model.pt
+python -m oncopattern gpm-atlas --model outputs/gpm/model.pt --source phantom_mri --out atlas.pt   # healthy atlas
+python -m oncopattern gpm-explain scan.png --model outputs/gpm/model.pt --atlas atlas.pt --out why.html
 
 python -m oncopattern analyze slide.png --model outputs/demo/tissue/model.pt --out report.html
 python -m oncopattern catalogue --organ lung --longitudinal
@@ -195,9 +201,11 @@ oncopattern/
                  model.py      D4 stem, physical positions, prefix-LM trunk, KV-cache decoding, surprise
                  data.py, sources.py   prompted tasks from phantoms, class folders, CSVs, mask folders
                  verify.py, rl.py      verifiable rewards, GRPO with abstention
+                 normative.py  healthy atlas, deviation z-maps, healthy counterfactuals, causal explanations
                  train.py, compute.py, evaluate.py   resumable Kaggle training, compute planner
   demo.py, cli.py
-kaggle/          kaggle_train.py (paste into a notebook) + README
+kaggle/          launch.py (CLI-driven GPU runs), kernel_run.py, kaggle_train.py (notebook) + README
+experiments/     normative_ablation.py (H8)
 tests/           42 tests (equivariance, KV cache = recompute, coverage guarantees, DDP, resume, ...)
 docs/            GPM.md (architecture + paper plan), INNOVATIONS.md (math), examples/
 ROADMAP.md       Track A phases 0-13, Track B phases G0-G10

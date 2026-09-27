@@ -117,6 +117,79 @@ RL training with the certified abstention used at deployment.
 `L = -mean_i A_i log pi(a_i)/|a_i| + beta KL(pi || pi_ref)`, with log-probs of
 the exact sampled token ids.
 
+## Knowing what healthy looks like: the normative atlas (`gpm/normative.py`)
+
+The model should know healthy anatomy in detail, say what is different in a
+patient's scan, and show *why* that difference drives its answer. Three
+parts do this:
+
+1. **Normative training.** The masked-patch ("what fits here") objective sees
+   **only healthy images**: the normal classes of labelled datasets (e.g.
+   `notumor`, `lung_n`, BUSI images with empty masks) plus dedicated
+   healthy cohorts via `healthy:<dir>` sources (IXI, OASIS-3 or HCP brains,
+   GTEx normal tissue; see the catalogue tag `healthy_reference`).
+   Question-answer training still uses every image. `--mixed-mim` turns
+   this off for the ablation.
+2. **Atlas.** On healthy scans the model never trained on (the `calib`
+   split), measure how predictable each position is:
+   `z_p = (log err_p - mu_p) / sd_p`, with per-position statistics shrunk
+   toward global ones. The highlight threshold is the 99.5th percentile of
+   z on held-out healthy scans, so it flags about 0.5% of healthy patches by
+   construction. The report also gives the scan's percentile among healthy
+   references.
+3. **Healthy counterfactual and causal explanation.** Flagged patches are
+   redrawn as the model expects healthy tissue to look, given *this
+   patient's* surrounding anatomy. The question is asked again on the
+   redrawn scan; the drop in the answer's probability is each region's causal
+   effect on the answer. The report shows four panels: the scan, deviation
+   from healthy, the model's healthy version, and the difference.
+
+```
+python -m oncopattern gpm-atlas   --model model.pt --source "folder:.../Training,modality=mri,mm=0.5" --out brain_atlas.pt
+python -m oncopattern gpm-explain scan.png --model model.pt --atlas brain_atlas.pt \
+       --question "Is there a tumour? Answer yes or no." --options "yes|no" --modality mri --mm-per-px 0.5
+```
+
+Data splits for real datasets are by file-name hash: train 80%, calib 10%
+(atlas only; never trained on), test 10% (final numbers only).
+
+**Hypothesis H8 (normative training):** learning "what fits" from healthy
+scans only makes deviations easier to detect and localise than learning it
+from all scans. `experiments/normative_ablation.py` tests this at matched
+compute; results are below.
+
+**Results (tiny preset, 1,500 steps each, MRI phantoms, single seed; raw numbers in
+`docs/examples/normative_ablation.json`):**
+
+| | "What fits" learned from healthy scans only | ... from all scans |
+|---|---|---|
+| Lesion vs healthy scan, from deviation alone (AUROC, no labels used) | 0.89 | 0.88 |
+| Deviation points at lesion pixels (patch AUROC vs masks) | 0.90 | 0.89 |
+| Lesions with a highlighted region on them | 95% | 95% |
+| Drop in P("yes, lesion") when highlighted regions are redrawn as healthy | **90 points** | 70 points |
+| Falsely highlighted patches per healthy scan (of 64) | 1.5 | 1.05 |
+
+Reading: detection and localisation are the **same** either way at this
+scale. The difference is the *explanation*: a model that learned "what fits"
+from scans containing tumours partly redraws the tumour when asked for a
+healthy version, so the counterfactual removes less of the reason. An
+earlier variant without region growing showed 70 versus 10 points, but most
+of that gap came from highlights covering only the lesion core, not from
+training. Region growing (hysteresis) fixed coverage at the cost of more
+false highlighted patches. One seed on phantoms: promising, not
+established. Example reports: `docs/examples/gpm_normative_explanation_lesion.html`
+(P("yes") 100% → 0.2% when the region is redrawn healthy) and `..._healthy.html`.
+In the lesion example the grown region also reaches the skull edge, and the
+model's redraw of the skull is blurred, so part of the "difference" panel
+there is redraw error rather than abnormality.
+
+**Limits.** "Healthy" means "like the reference set": a biased reference set
+(one scanner, one age group) gives a biased atlas. Positions are grid
+positions, so references and patients need a roughly common frame; proper
+registration to an anatomical template (e.g. MNI space for brains) is on the
+roadmap. A counterfactual is the model's belief about healthy tissue, not
+ground truth.
+
 ## What we learned debugging it (measured, and worth reporting)
 
 The first version could not learn "is there a mass lesion?" on MRI

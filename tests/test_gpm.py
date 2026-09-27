@@ -247,8 +247,10 @@ def test_train_test_split_is_deterministic_and_disjoint(tmp_path):
     names = [tmp_path / f"img_{i}.png" for i in range(2000)]
     train = {n.name for n in names if in_split(n, "train")}
     test = {n.name for n in names if in_split(n, "test")}
-    assert not train & test and len(train) + len(test) == 2000
-    assert 0.07 < len(test) / 2000 < 0.13
+    calib = {n.name for n in names if in_split(n, "calib")}
+    assert not train & test and not train & calib and not test & calib
+    assert len(train) + len(test) + len(calib) == 2000
+    assert 0.07 < len(test) / 2000 < 0.13 and 0.07 < len(calib) / 2000 < 0.13
     assert test == {n.name for n in names if in_split(tmp_path / "elsewhere" / n.name, "test")}  # name-based
 
 
@@ -267,3 +269,36 @@ def test_kaggle_launcher_builds_a_valid_kernel(tmp_path, monkeypatch):
     cfg = json.loads(first[len("CONFIG = "):])
     assert cfg["steps"] == 1234 and cfg["preset"] == "base"
     compile((d / "kernel_run.py").read_text(), "kernel_run.py", "exec")
+
+
+def test_normative_training_learns_normal_from_healthy_images_only(sources):
+    rng = np.random.default_rng(11)
+    mix = Mixture([sources[1]], mim_fraction=1.0, normative=True)
+    for _ in range(10):  # every masked-pattern image is a healthy scan
+        ex = mix.sample(rng)
+        assert ex.mim and len(ex.images) == 1
+    src = sources[1]
+    healthy = src.normal_images(np.random.default_rng(3))[0].pixels
+    lesion = src.sample(np.random.default_rng(3), "lesion")
+    assert healthy.shape == lesion.images[0].pixels.shape
+
+
+def test_normative_atlas_counterfactual_and_explanation(sources):
+    from oncopattern.gpm.normative import NormativeAtlas, evaluate_atlas, explanation_html, healthy_items
+    m = tiny_model().eval()
+    src = sources[1]
+    rng = np.random.default_rng(12)
+    atlas = NormativeAtlas.fit(m, TOK, healthy_items(src, rng, 12))
+    assert atlas.mu.shape == (64,) and atlas.z_threshold >= 2.0 and len(atlas.ref_scores) >= 2
+    ex = src.sample(rng, "lesion")
+    item = ex.images[0]
+    grid = np.zeros((8, 8), bool)
+    grid[2:4, 3:5] = True
+    cf = atlas.healthy_counterfactual(m, TOK, item, grid)
+    changed = np.abs(cf - item.pixels) > 1e-6
+    assert changed[16:32, 24:40].any() and not changed[:16].any()  # only flagged patches are redrawn
+    e = atlas.explain(m, TOK, ex, ["yes", "no"])
+    assert abs(sum(e["p"]) - 1) < 1e-5 and "healthy reference scans" in e["narrative"]
+    assert explanation_html(e, item.pixels).startswith("<!doctype html>")
+    res = evaluate_atlas(m, TOK, src, atlas, n=6)
+    assert 0 <= res["image_auroc"] <= 1

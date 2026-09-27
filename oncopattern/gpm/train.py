@@ -31,8 +31,8 @@ from torch.utils.data import DataLoader, IterableDataset, get_worker_info
 from oncopattern.gpm.config import preset
 from oncopattern.gpm.data import build, collate
 from oncopattern.gpm.model import GeneralPatternModel
-from oncopattern.gpm.sources import (CSVSource, ImageFolderSource, MaskFolderSource, Mixture, MRIPhantomSource,
-                                     TissuePhantomSource)
+from oncopattern.gpm.sources import (CSVSource, HealthyFolderSource, ImageFolderSource, MaskFolderSource, Mixture,
+                                     MRIPhantomSource, TissuePhantomSource)
 from oncopattern.gpm.tokenizer import ByteTokenizer
 
 
@@ -46,13 +46,14 @@ def parse_spec(spec: str) -> tuple[str, str, dict]:
 
 
 def build_sources(specs, tok: ByteTokenizer, image_size: int = 64, seed: int = 0, mim_fraction: float = 0.3,
-                  split: str | None = "train") -> Mixture:
+                  split: str | None = "train", normative: bool = True) -> Mixture:
     """Source specs (options after commas; ``weight`` sets the sampling weight):
 
     * ``phantom_tissue`` / ``phantom_mri``
     * ``folder:<root>,modality=histology,mm=0.0005,rgb=1[,normal=lung_n|colon_n]``: class sub-folders
     * ``csv:<labels.csv>,images=<dir>,ext=.tif,id=id,label=label,names=0=normal|1=metastasis,modality=...,mm=...``
     * ``masks:<images>,masks=<dir>`` or ``masks:<images>,suffix=_mask``, plus ``modality=,mm=,finding=``
+    * ``healthy:<dir>,modality=mri,mm=1.0``: images from healthy people only (normative reference)
 
     Real-data sources use a deterministic name-hash split (``split``: train 90% / test 10%);
     training always uses ``train``, evaluation ``test``.
@@ -81,11 +82,14 @@ def build_sources(specs, tok: ByteTokenizer, image_size: int = 64, seed: int = 0
             src = MaskFolderSource(path, o.get("masks"), tok, o.get("modality", "other"), float(o.get("mm", 1.0)),
                                    o.get("finding", "lesion"), mask_suffix=o.get("suffix", ""),
                                    rgb=o.get("rgb", "0") == "1", description=o.get("text", ""), **common, **real)
+        elif kind == "healthy":
+            src = HealthyFolderSource(path, tok, o.get("modality", "other"), float(o.get("mm", 1.0)),
+                                      rgb=o.get("rgb", "0") == "1", description=o.get("text", ""), **common, **real)
         else:
             raise ValueError(f"unknown source kind {kind!r} in {spec!r}")
         srcs.append(src)
         weights.append(w)
-    return Mixture(srcs, weights, mim_fraction)
+    return Mixture(srcs, weights, mim_fraction, normative)
 
 
 class StreamDataset(IterableDataset):
@@ -127,7 +131,7 @@ def train(preset_name: str = "tiny", steps: int = 1000, batch_size: int = 16, lr
           out: str = "outputs/gpm", sources=("phantom_tissue", "phantom_mri"), time_budget_h: float | None = None,
           ckpt_minutes: float = 20.0, resume: bool = True, seed: int = 0, grad_accum: int = 1, image_size: int = 64,
           num_workers: int = 0, weight_decay: float = 0.05, log_every: int = 10, overrides: dict | None = None,
-          mim_fraction: float = 0.3) -> dict:
+          mim_fraction: float = 0.3, normative: bool = True) -> dict:
     t_start = time.time()
     world, rank, device = _setup_distributed()
     torch.manual_seed(seed)
@@ -165,7 +169,7 @@ def train(preset_name: str = "tiny", steps: int = 1000, batch_size: int = 16, lr
         net = torch.nn.parallel.DistributedDataParallel(model, device_ids=[device.index] if device.type == "cuda" else None,
                                                         find_unused_parameters=True)
 
-    mixture = build_sources(sources, tok, image_size, seed, mim_fraction)
+    mixture = build_sources(sources, tok, image_size, seed, mim_fraction, normative=normative)
     ds = StreamDataset(mixture, tok, cfg.patch_size, seed * 1_000_003 + rank * 7919 + start)
     dl = iter(DataLoader(ds, batch_size=batch_size, num_workers=num_workers,
                          collate_fn=lambda b: collate(b, tok), pin_memory=device.type == "cuda"))

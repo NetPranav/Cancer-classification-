@@ -1,0 +1,41 @@
+{
+  "single_threshold": {
+    "normative": {
+      "image_auroc": 0.890625,
+      "patch_auroc": 0.8962671631743114,
+      "lesions_with_a_highlight_on_them": 0.95,
+      "mean_false_highlighted_patches_per_healthy_scan": 0.25,
+      "mean_drop_in_P_yes_when_flagged_regions_made_healthy": 0.6985934311252794,
+      "z_threshold": 2.003972291946411,
+      "train_minutes": 16.955144262313844
+    },
+    "mixed": {
+      "image_auroc": 0.883125,
+      "patch_auroc": 0.888824120396246,
+      "lesions_with_a_highlight_on_them": 0.95,
+      "mean_false_highlighted_patches_per_healthy_scan": 0.225,
+      "mean_drop_in_P_yes_when_flagged_regions_made_healthy": 0.10069549732378028,
+      "z_threshold": 2.0,
+      "train_minutes": 15.908411204814911
+    }
+  },
+  "hysteresis_regions": {
+    "normative": {
+      "image_auroc": 0.890625,
+      "patch_auroc": 0.8962671631743114,
+      "lesions_with_a_highlight_on_them": 0.95,
+      "mean_false_highlighted_patches_per_healthy_scan": 1.475,
+      "mean_drop_in_P_yes_when_flagged_regions_made_healthy": 0.8981819531157293,
+      "z_threshold": 2.003972291946411
+    },
+    "mixed": {
+      "image_auroc": 0.883125,
+      "patch_auroc": 0.888824120396246,
+      "lesions_with_a_highlight_on_them": 0.95,
+      "mean_false_highlighted_patches_per_healthy_scan": 1.05,
+      "mean_drop_in_P_yes_when_flagged_regions_made_healthy": 0.7004609652518432,
+      "z_threshold": 2.0
+    }
+  },
+  "note": "tiny preset, 1500 steps, MRI phantoms, single seed"
+}

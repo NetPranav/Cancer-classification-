@@ -82,6 +82,11 @@ class Source:
     def image_only(self, rng: np.random.Generator) -> list[ImageItem]:
         raise NotImplementedError
 
+    def normal_images(self, rng: np.random.Generator) -> list[ImageItem] | None:
+        """A *healthy* image from this source, or None if it has no known-normal pool. Normative
+        training learns what healthy anatomy looks like only from these."""
+        return None
+
     def _pick(self, rng, task):
         if task:
             return task
@@ -106,13 +111,16 @@ class TissuePhantomSource(Source):
     def image_only(self, rng):
         return [self._item(tissue_patch(rng, TISSUE_PATTERNS[rng.integers(4)], size=self.size).image)]
 
+    def normal_images(self, rng):
+        return [self._item(tissue_patch(rng, "normal", size=self.size).image)]
+
     def sample(self, rng, task=None):
         task = self._pick(rng, task)
         pat = TISSUE_PATTERNS[rng.integers(len(TISSUE_PATTERNS))]
         p = tissue_patch(rng, pat, size=self.size)
         head = "H&E-like tissue, 0.5 um/px."
         box = mask_box(p.mask)
-        meta = {"task": task, "label": pat}
+        meta = {"task": task, "label": pat, "mask": p.mask}
         if task == "classify":
             opts = [words(x) for x in rng.permutation(TISSUE_PATTERNS)]
             q = f" Which pattern is present? Options: {', '.join(opts)}."
@@ -156,6 +164,9 @@ class MRIPhantomSource(Source):
         r = rng.uniform(1.2, 4.0) if rng.random() < 0.5 else 0.0
         return [ImageItem(mri_slice(rng, self.size, r).image, self.spacing_mm, "phantom_mri")]
 
+    def normal_images(self, rng):
+        return [ImageItem(mri_slice(rng, self.size).image, self.spacing_mm, "phantom_mri")]
+
     def sample(self, rng, task=None):
         task = self._pick(rng, task)
         head = "Axial head MRI, 3 mm/px."
@@ -178,6 +189,7 @@ class MRIPhantomSource(Source):
                            ans, task, meta)
         r = rng.uniform(1.2, 4.0) if rng.random() < 0.5 else 0.0
         p = mri_slice(rng, self.size, r)
+        meta["mask"] = p.mask
         if task == "lesion":
             q, ans = " Is there a mass lesion? Answer yes or no.", "yes" if r else "no"
             meta.update(label=ans, options=["yes", "no"])
@@ -203,14 +215,17 @@ def _load(path: Path, size: int, rgb: bool = False) -> np.ndarray:
     return prepare(load(path), size)
 
 
-def in_split(path, split: str | None, test_fraction: float = 0.1) -> bool:
-    """Deterministic, name-based split: the same file is always train or always test, on every machine
-    and every session, so held-out evaluation never sees training images."""
+def in_split(path, split: str | None) -> bool:
+    """Deterministic, name-based three-way split: test 10% | calib 10% | train 80%.
+
+    The same file lands in the same split on every machine and every session. ``calib`` holds
+    images the model never trains on, used to calibrate the normative atlas; ``test`` is only for
+    final evaluation."""
     if split in (None, "all"):
         return True
     import zlib
     h = zlib.crc32(str(Path(path).name).encode()) / 2 ** 32
-    return (h < test_fraction) == (split == "test")
+    return {"test": h < 0.1, "calib": 0.1 <= h < 0.2, "train": h >= 0.2}[split]
 
 
 def _grey(img: np.ndarray) -> np.ndarray:
@@ -250,6 +265,13 @@ class ImageFolderSource(Source):
 
     def image_only(self, rng):
         return [ImageItem(self._rand(rng)[1], self.spacing, self.modality)]
+
+    def normal_images(self, rng):
+        if not self.normal:
+            return None
+        c = self.normal[rng.integers(len(self.normal))]
+        f = self.files[c][rng.integers(len(self.files[c]))]
+        return [ImageItem(_load(f, self.size, self.rgb), self.spacing, self.modality)]
 
     def sample(self, rng, task=None):
         task = self._pick(rng, task)
@@ -312,11 +334,18 @@ class MaskFolderSource(Source):
     def image_only(self, rng):
         return [ImageItem(self._rand(rng)[0], self.spacing, self.modality)]
 
+    def normal_images(self, rng):
+        for _ in range(12):  # images with an empty mask are the healthy pool
+            img, m = self._rand(rng)
+            if not m.any():
+                return [ImageItem(img, self.spacing, self.modality)]
+        return None
+
     def sample(self, rng, task=None):
         task = self._pick(rng, task)
         img, m = self._rand(rng)
         box = mask_box(m)
-        meta = {"task": task}
+        meta = {"task": task, "mask": m}
         if task == "locate":
             q, ans = f" Locate the {self.finding}.", self.tok.box_text(*box) if box else "none"
             meta["box"] = box
@@ -358,17 +387,66 @@ class CSVSource(ImageFolderSource):
         self.task_weights = {"classify": 3, "normal": 1, "measure": 1} if self.normal else {"classify": 1}
 
 
-class Mixture:
-    """Weighted mixture of sources; ``mim_fraction`` of examples are label-free masked-pattern ones."""
+class HealthyFolderSource(Source):
+    """A folder of images from healthy people only (e.g. IXI or OASIS brains, GTEx normal tissue).
 
-    def __init__(self, sources: list[Source], weights: list[float] | None = None, mim_fraction: float = 0.3):
+    Its main job is the normative objective: teaching the model, in detail, what healthy anatomy
+    looks like. It also contributes 'is this normal? -> yes' examples at a low weight."""
+
+    task_weights = {"normal": 1}
+    EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".npy"}
+
+    def __init__(self, root: str, tok: ByteTokenizer, modality: str, spacing_mm: float, size: int = 64,
+                 rgb: bool = False, description: str = "", split: str | None = None):
+        self.tok, self.modality, self.spacing, self.size, self.rgb = tok, modality, spacing_mm, size, rgb
+        self.files = sorted(f for f in Path(root).rglob("*") if f.suffix.lower() in self.EXTS and in_split(f, split))
+        if not self.files:
+            raise ValueError(f"no images under {root}")
+        self.name = f"healthy:{Path(root).name}"
+        self.description = description or f"{modality} image, {spacing_mm * 1000:g} um/px."
+
+    def _img(self, rng):
+        return _load(self.files[rng.integers(len(self.files))], self.size, self.rgb)
+
+    def image_only(self, rng):
+        return [ImageItem(self._img(rng), self.spacing, self.modality)]
+
+    normal_images = image_only
+
+    def sample(self, rng, task=None):
+        meta = {"task": "normal", "label": "normal", "options": ["yes", "no"], "answer": "yes"}
+        return Example(self.image_only(rng), self.description, " Is this image normal? Answer yes or no.", "yes",
+                       "normal", meta)
+
+
+class Mixture:
+    """Weighted mixture of sources.
+
+    ``mim_fraction`` of examples are label-free masked-pattern examples. With ``normative=True``
+    (the default) those images are drawn **only from healthy pools**, so the model's notion of
+    "what fits" is healthy anatomy, and its surprise measures deviation *from health* rather than
+    from a mixture that already contains tumours. Question-answer examples still use every image.
+    """
+
+    def __init__(self, sources: list[Source], weights: list[float] | None = None, mim_fraction: float = 0.3,
+                 normative: bool = True):
         self.sources = sources
         w = np.asarray(weights or [1.0] * len(sources), float)
         self.p = w / w.sum()
         self.mim_fraction = mim_fraction
+        self.normative = normative
 
     def sample(self, rng: np.random.Generator) -> Example:
-        src = self.sources[rng.choice(len(self.sources), p=self.p)]
         if rng.random() < self.mim_fraction:
-            return Example(src.image_only(rng), "Study this image.", "", "", "mim", {"task": "mim"}, mim=True)
+            imgs = None
+            if self.normative:
+                for _ in range(len(self.sources) * 2):
+                    src = self.sources[rng.choice(len(self.sources), p=self.p)]
+                    imgs = src.normal_images(rng)
+                    if imgs:
+                        break
+            if not imgs:  # no healthy pool anywhere (or normative off): use any image
+                imgs = self.sources[rng.choice(len(self.sources), p=self.p)].image_only(rng)
+            return Example(imgs, "Study this image.", "", "", "mim", {"task": "mim"}, mim=True)
+        src = self.sources[rng.choice(len(self.sources), p=self.p)]
         return src.sample(rng)
