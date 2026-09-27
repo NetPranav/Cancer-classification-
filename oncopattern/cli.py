@@ -27,6 +27,50 @@ def main(argv=None):
     c.add_argument("--modality")
     c.add_argument("--longitudinal", action="store_true")
 
+    g = sub.add_parser("gpm-plan", help="what General Pattern Model size fits a GPU budget and dataset")
+    g.add_argument("--gpu", default="t4")
+    g.add_argument("--n-gpus", type=int, default=2)
+    g.add_argument("--hours", type=float, default=30)
+    g.add_argument("--mfu", type=float, default=0.3, help="assumed hardware utilisation")
+    g.add_argument("--unique-tokens", type=float, default=None, help="unique training tokens in your data")
+
+    t = sub.add_parser("gpm-train", help="train the General Pattern Model from scratch (resumable)")
+    t.add_argument("--preset", default="tiny")
+    t.add_argument("--steps", type=int, default=3000)
+    t.add_argument("--batch-size", type=int, default=16)
+    t.add_argument("--grad-accum", type=int, default=1)
+    t.add_argument("--lr", type=float, default=1e-3)
+    t.add_argument("--warmup", type=int, default=150)
+    t.add_argument("--out", default="outputs/gpm")
+    t.add_argument("--sources", nargs="+", default=["phantom_tissue", "phantom_mri"],
+                   help="phantom_tissue | phantom_mri | folder:<root>,modality=,mm=,rgb=1 | "
+                        "csv:<labels.csv>,images=,ext=,names=0=normal|1=tumour | masks:<imgs>,masks=<dir>|suffix=_mask "
+                        "(see oncopattern/gpm/train.py:build_sources)")
+    t.add_argument("--image-size", type=int, default=64)
+    t.add_argument("--in-channels", type=int, default=1, help="3 for colour (H&E) data")
+    t.add_argument("--time-budget-h", type=float, default=None, help="stop and checkpoint before this many hours")
+    t.add_argument("--ckpt-minutes", type=float, default=20)
+    t.add_argument("--num-workers", type=int, default=0)
+    t.add_argument("--grad-checkpoint", action="store_true")
+    t.add_argument("--no-surprise", action="store_true", help="disable surprise conditioning (ablation; ~1.7x cheaper)")
+    t.add_argument("--stem", default=None, choices=["d4conv", "d4", "linear"], help="patch stem (ablation)")
+    t.add_argument("--seed", type=int, default=0)
+
+    e = sub.add_parser("gpm-eval", help="grade every task with the verifier; surprise-map AUROC")
+    e.add_argument("--model", required=True)
+    e.add_argument("--n", type=int, default=20, help="examples per task")
+    e.add_argument("--out", default=None, help="write results JSON here")
+    e.add_argument("--image-size", type=int, default=64)
+
+    q = sub.add_parser("gpm-ask", help="ask the General Pattern Model anything about an image")
+    q.add_argument("image")
+    q.add_argument("question")
+    q.add_argument("--model", required=True)
+    q.add_argument("--modality", default="other")
+    q.add_argument("--mm-per-px", type=float, default=1.0)
+    q.add_argument("--context", default="", help="text before the image, e.g. 'H&E tissue, 0.5 um/px.'")
+    q.add_argument("--image-size", type=int, default=64)
+
     args = ap.parse_args(argv)
     if args.cmd == "demo":
         from oncopattern.demo import run_longitudinal_demo, run_tissue_demo
@@ -51,6 +95,42 @@ def main(argv=None):
         Path(args.out).write_text(html_report(res, img, DISCLAIMER))
         print(res.narrative)
         print(f"\nreport: {args.out}")
+    elif args.cmd == "gpm-plan":
+        from oncopattern.gpm.compute import format_plan, plan
+        print(format_plan(plan(args.gpu, args.n_gpus, args.hours, args.mfu, args.unique_tokens)))
+    elif args.cmd == "gpm-train":
+        from oncopattern.gpm.train import train
+        res = train(args.preset, args.steps, args.batch_size, args.lr, args.warmup, args.out, args.sources,
+                    args.time_budget_h, args.ckpt_minutes, seed=args.seed, grad_accum=args.grad_accum,
+                    image_size=args.image_size, num_workers=args.num_workers,
+                    overrides={"grad_checkpoint": args.grad_checkpoint, "in_channels": args.in_channels,
+                               "surprise_conditioning": not args.no_surprise,
+                               **({"stem": args.stem} if args.stem else {})})
+        print(json.dumps({k: v for k, v in res.items() if k != "history"}, indent=2))
+    elif args.cmd == "gpm-eval":
+        from oncopattern.gpm.evaluate import evaluate_tasks, surprise_auroc
+        from oncopattern.gpm.sources import MRIPhantomSource, TissuePhantomSource
+        from oncopattern.gpm.tokenizer import ByteTokenizer
+        from oncopattern.gpm.train import load_model
+        tok = ByteTokenizer()
+        model = load_model(args.model)
+        srcs = [TissuePhantomSource(tok, size=args.image_size), MRIPhantomSource(tok, size=args.image_size)]
+        res = {"tasks": evaluate_tasks(model, tok, srcs, args.n),
+               "surprise": surprise_auroc(model, tok, size=args.image_size)}
+        text = json.dumps(res, indent=2, default=float)
+        if args.out:
+            Path(args.out).write_text(text)
+        print(text)
+    elif args.cmd == "gpm-ask":
+        from oncopattern.data.io import load, prepare
+        from oncopattern.gpm.data import Example, ImageItem, prompt_batch
+        from oncopattern.gpm.tokenizer import ByteTokenizer
+        from oncopattern.gpm.train import load_model
+        tok = ByteTokenizer()
+        model = load_model(args.model)
+        img = prepare(load(args.image), args.image_size)
+        ex = Example([ImageItem(img, args.mm_per_px, args.modality)], args.context, " " + args.question)
+        print(tok.decode(model.generate(prompt_batch(ex, tok, model.cfg.patch_size), 32, eos_id=tok.eos_id)))
     elif args.cmd == "catalogue":
         from oncopattern.data.catalogue import search
         for e in search(organ=args.organ, modality=args.modality, longitudinal=True if args.longitudinal else None):

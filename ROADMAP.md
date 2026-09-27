@@ -148,6 +148,26 @@ and Mirai (breast cancer risk from mammograms).
 
 ---
 
+## Track B: General Pattern Model (from scratch; `oncopattern/gpm/`, see docs/GPM.md)
+
+Track A (phases 0-13 above) is an explainable pipeline. Track B is a
+**general-purpose model**: one transformer, one token stream, every task a
+prompt, no classification head. The Track A tools become its *verifier*.
+
+| Phase | What | Status |
+|---|---|---|
+| G0 | Byte tokenizer with coordinate and `<abstain>` tokens; configs tiny → 7B (exact counts) | ✅ |
+| G1 | Trunk: RMSNorm, SwiGLU, RoPE, prefix-LM mask (bidirectional per image), KV-cache decoding | ✅ tested (cache = full recompute) |
+| G2 | D4 orientation-shared patch stem; physical-unit position code (um → m, days) | ✅ tested |
+| G3 | Objectives: answer generation + masked-patch prediction in one pass; patch surprise | ✅ |
+| G4 | Verifier-generated tasks (count, measure, locate, compare, describe) for any image | ✅ |
+| G5 | GRPO from verifiable rewards with an abstention reward | ✅ one-step tested |
+| G6 | Kaggle-ready training: resumable, time budget, fp16/bf16, 2-GPU DDP, real-data sources (folders, CSV, masks, colour) | ✅ DDP tested on CPU (gloo) |
+| G7 | First real run: `base` on Kaggle 2x T4 with PCam + LC25000 + Brain MRI + BUSI | ⬜ **your next step** |
+| G8 | Ablations H1-H5 (docs/GPM.md) at matched compute, 3 seeds; held-out dataset | ⬜ |
+| G9 | Foveated reading for whole slides: low-resolution pass → surprise → read only surprising tiles at high resolution | ⬜ |
+| G10 | Scale-up (1b / 7b) with FSDP, when hardware allows | ⬜ |
+
 ## What is intentionally *not* claimed
 * **100% accuracy.** No finite dataset can certify it. We certify an error
   bound on answered cases and refer the rest; see `docs/INNOVATIONS.md` §8 for

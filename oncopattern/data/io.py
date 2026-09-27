@@ -33,6 +33,17 @@ def load(path: str | Path) -> np.ndarray:
     return np.asarray(im.convert("L"), np.float32)
 
 
+def load_rgb(path: str | Path) -> np.ndarray:
+    """(3, H, W) float32 in [0, 1] from an 8-bit colour image (stain colour preserved, no stretching)."""
+    from PIL import Image
+    return np.asarray(Image.open(path).convert("RGB"), np.float32).transpose(2, 0, 1) / 255.0
+
+
+def prepare_rgb(img: np.ndarray, size: int = 64) -> np.ndarray:
+    c, h, w = img.shape
+    return np.clip(ndi.zoom(img, (1, size / h, size / w), order=1), 0, 1).astype(np.float32)[:, :size, :size]
+
+
 def normalise(img: np.ndarray, lo: float = 0.5, hi: float = 99.5) -> np.ndarray:
     a, b = np.percentile(img, [lo, hi])
     return np.clip((img - a) / max(b - a, 1e-6), 0, 1).astype(np.float32)

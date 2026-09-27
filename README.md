@@ -15,6 +15,24 @@ acquire next.
 > that it is clinically accurate. See [ROADMAP.md](ROADMAP.md) Phase 10 for
 > real-data validation.
 
+**Two tracks live in this repository:**
+
+* **Track B, the General Pattern Model (GPM)** in `oncopattern/gpm/`: a
+  from-scratch, general-purpose transformer. **It is not a classifier.** Text
+  and image patches share one token stream, and every task (detect, locate,
+  measure, count, compare scans over time, describe, *decline to answer*) is a
+  prompt with a text answer. It learns tissue "grammar" by predicting hidden
+  patches, so its surprise at a patch is a label-free anomaly map (like a code
+  model flagging an unlikely token). Its answers are graded by deterministic
+  verifiers (like unit tests for code). Sizes run from 2.0M to 7.15B
+  parameters; about 88M is the right size for Kaggle's 2x T4. See
+  [docs/GPM.md](docs/GPM.md) and [kaggle/README.md](kaggle/README.md).
+* **Track A, the explainable pipeline** (the rest of `oncopattern/`):
+  deciban evidence ledgers, counterfactual regions, certified abstention and
+  the failure loop. GPM reuses these tools as its verifier and calibration layer.
+
+### Track A pipeline
+
 ```mermaid
 flowchart LR
     X[Scan / slide] --> P[Physics priors<br/>nematic order, morphometry]
@@ -43,7 +61,12 @@ pip install -e ".[io,dev]"  # + DICOM/NIfTI/PNG readers and pytest
 
 python -m oncopattern demo --quick          # every phase end to end, about 1 minute
 python -m oncopattern demo                  # larger run, about 2 minutes
-python -m pytest                            # 29 tests, about 15 s
+python -m pytest                            # 42 tests, about 3 min
+
+python -m oncopattern gpm-plan --gpu t4 --n-gpus 2 --hours 30        # what size fits your GPUs
+python -m oncopattern gpm-train --preset tiny --steps 3000           # train GPM from scratch (CPU ok for tiny)
+python -m oncopattern gpm-eval --model outputs/gpm/model.pt          # grade every task with the verifier
+python -m oncopattern gpm-ask img.png "Locate the most abnormal cells." --model outputs/gpm/model.pt
 
 python -m oncopattern analyze slide.png --model outputs/demo/tissue/model.pt --out report.html
 python -m oncopattern catalogue --organ lung --longitudinal
@@ -142,10 +165,18 @@ oncopattern/
   loop/          failures.py         ledger, slices, clusters, learning curve
   longitudinal/  change.py           Kalman, CUSUM, doubling time
   pipeline.py    OncoPattern: pretrain -> fit_normal -> fit -> calibrate -> analyze/evaluate
+  gpm/           General Pattern Model (Track B)
+                 tokenizer.py  bytes + <c..> boxes + <abstain>
+                 config.py     presets tiny (2.0M) ... 7b (7.15B)
+                 model.py      D4 stem, physical positions, prefix-LM trunk, KV-cache decoding, surprise
+                 data.py, sources.py   prompted tasks from phantoms, class folders, CSVs, mask folders
+                 verify.py, rl.py      verifiable rewards, GRPO with abstention
+                 train.py, compute.py, evaluate.py   resumable Kaggle training, compute planner
   demo.py, cli.py
-tests/           29 tests (equivariance, stream = parallel, coverage guarantees, ...)
-docs/            INNOVATIONS.md (math), examples/ (sample reports)
-ROADMAP.md       phases 0-13 with status and exit criteria
+kaggle/          kaggle_train.py (paste into a notebook) + README
+tests/           42 tests (equivariance, KV cache = recompute, coverage guarantees, DDP, resume, ...)
+docs/            GPM.md (architecture + paper plan), INNOVATIONS.md (math), examples/
+ROADMAP.md       Track A phases 0-13, Track B phases G0-G10
 ```
 
 ## Using your own data

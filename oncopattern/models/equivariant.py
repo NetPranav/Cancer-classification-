@@ -46,20 +46,27 @@ def _tables():
 COMPOSE, INVERSE = _tables()
 
 
+def _conv(x, w, pad: int, mode: str):
+    if mode == "zeros" or pad == 0:
+        return F.conv2d(x, w, padding=pad)
+    return F.conv2d(F.pad(x, (pad, pad, pad, pad), mode=mode), w)
+
+
 class LiftingConv(nn.Module):
     """Image (B, C, H, W) -> group feature map (B, C_out, 8, H, W)."""
 
-    def __init__(self, c_in: int, c_out: int, k: int = 5):
+    def __init__(self, c_in: int, c_out: int, k: int = 5, padding_mode: str = "zeros"):
         super().__init__()
         self.weight = nn.Parameter(torch.empty(c_out, c_in, k, k))
         self.bias = nn.Parameter(torch.zeros(c_out))
         nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
         self.pad = k // 2
+        self.padding_mode = padding_mode  # "replicate" avoids fake edges at borders; commutes with D4
 
     def forward(self, x):
         w = torch.stack([d4_transform(self.weight, g) for g in range(G)], dim=1)
         c_out = w.shape[0]
-        y = F.conv2d(x, w.flatten(0, 1), padding=self.pad)
+        y = _conv(x, w.flatten(0, 1), self.pad, self.padding_mode)
         return y.view(x.shape[0], c_out, G, *y.shape[-2:]) + self.bias.view(1, -1, 1, 1, 1)
 
 
@@ -70,8 +77,9 @@ class GroupConv(nn.Module):
     out[T_u in](g) = T_u out[in](u^-1 g).
     """
 
-    def __init__(self, c_in: int, c_out: int, k: int = 3):
+    def __init__(self, c_in: int, c_out: int, k: int = 3, padding_mode: str = "zeros"):
         super().__init__()
+        self.padding_mode = padding_mode
         self.weight = nn.Parameter(torch.empty(c_out, c_in, G, k, k))
         self.bias = nn.Parameter(torch.zeros(c_out))
         nn.init.kaiming_uniform_(self.weight.view(c_out, c_in * G, k, k), a=math.sqrt(5))
@@ -86,7 +94,7 @@ class GroupConv(nn.Module):
 
     def forward(self, x):
         b, c, g, h, w = x.shape
-        y = F.conv2d(x.reshape(b, c * g, h, w), self.full_weight(), padding=self.pad)
+        y = _conv(x.reshape(b, c * g, h, w), self.full_weight(), self.pad, self.padding_mode)
         return y.view(b, -1, G, h, w) + self.bias.view(1, -1, 1, 1, 1)
 
 
